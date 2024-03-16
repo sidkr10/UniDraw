@@ -1,0 +1,42 @@
+.menu-container {
+    position: absolute;
+    width: 250px;
+    height: 50px;
+    align-items: center;
+    top: 10px;
+    left: calc(50% - 125px);
+    border: none;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-around;
+    background-color: #E1E5F2;
+    z-index: 99;
+}
+
+.menu-tool {
+    padding-top: 2px;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    transition: 0.5s;
+    background-color: #BFDBF7;
+}
+
+.menu-tool:hover {
+    padding-top: 2px;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1F7A8C;
+}
+
+.menu-tool_active {
+    padding-top: 2px;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #BFDBF7;
+    border-radius: 5px;
+    background-color: #1F7A8C;
+}
