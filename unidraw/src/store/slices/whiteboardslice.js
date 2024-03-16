@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     tool: null,
+    sessionConnected : false,
     elements : [],
   };
   
@@ -27,9 +28,12 @@ const initialState = {
       setElements: (state, action) => {
         state.elements = action.payload;
       },
+      setSessionState: (state, actions) => {
+        state.sessionConnected = actions.payload;
+      }
     },
   });
 
-export const { setTool, updateElements, setElements } = whiteBoardSlice.actions;
+export const { setTool, updateElements, setElements, setSessionState } = whiteBoardSlice.actions;
 
 export default whiteBoardSlice.reducer;

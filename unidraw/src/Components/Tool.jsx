@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { setTool } from '../../store/slices/whiteboardslice'
+import { setTool } from '../store/slices/whiteboardslice'
 
 const Tool = ({src, tooltype}) => {
 

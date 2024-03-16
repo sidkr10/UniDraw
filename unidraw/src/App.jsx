@@ -1,14 +1,22 @@
-import { useEffect } from "react"
-import WhiteBoard from "./Components/WhiteBoard"
-import { connectToWebSocket } from "./sockjsclient";
+import WhiteBoard from "./Components/WhiteBoard";
+import { connectToWebSocket, disconnectWebSocket } from "./sockjsclient";
+import SessionBtn from "./Components/SessionBtn";
 
 function App() {
-  useEffect(()=>{
-    connectToWebSocket();    
-  }, []);
+
+  const startSession = () => {
+    connectToWebSocket(); 
+  }
+  
+  const endSession = () => {
+    disconnectWebSocket();
+  }
 
   return (
+    <>
+      <SessionBtn startAction={startSession} endAction={endSession} />
       <WhiteBoard />
+    </>
   )
 }
 

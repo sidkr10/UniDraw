@@ -1,1 +1,1 @@
-export { connectToWebSocket } from './wsclient'
+export { connectToWebSocket, disconnectWebSocket } from './wsclient'
