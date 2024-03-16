@@ -1,4 +1,4 @@
-import Menu from "./Menu/Menu";
+import Menu from "./Menu";
 import { useEffect, useRef, useState } from 'react';
 import rough from 'roughjs';
 import { actions as whiteboardactions } from '../store/actions/whiteboardactions';

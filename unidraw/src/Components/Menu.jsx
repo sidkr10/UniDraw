@@ -1,10 +1,9 @@
 import Tool from './Tool'
-import './menu.css'
-import line from '../../assets/icons/line-svgrepo-com.svg'
-import rectangle from '../../assets/icons/rectangle-svgrepo-com.svg'
-import circle from '../../assets/icons/circle-svgrepo-com.svg'
-import scribble from '../../assets/icons/scribble-svgrepo-com.svg'
-import { toolType } from '../../Enums/ToolTypes'
+import line from '../assets/icons/line-svgrepo-com.svg'
+import rectangle from '../assets/icons/rectangle-svgrepo-com.svg'
+import circle from '../assets/icons/circle-svgrepo-com.svg'
+import scribble from '../assets/icons/scribble-svgrepo-com.svg'
+import { toolType } from '../Enums'
 
 const Menu = () => {
 
