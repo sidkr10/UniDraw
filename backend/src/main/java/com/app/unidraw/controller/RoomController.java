@@ -1,21 +1,49 @@
 package com.app.unidraw.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
+import com.app.unidraw.dto.*;
+import com.app.unidraw.enums.State;
+import com.app.unidraw.models.Element;
+import com.app.unidraw.repository.ElementsRepository;
+import com.app.unidraw.services.RoomService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.*;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
+import java.util.List;
+
 @Controller
+@Slf4j
 public class RoomController {
 
-    Logger logger = LoggerFactory.getLogger(RoomController.class);
-    @MessageMapping("/broadCastElements")
-    @SendTo("/room/public")
-    public JsonNode broadCastElements(@Payload JsonNode elements){
-        logger.info(elements.toPrettyString());
-        return elements;
+    private RoomService roomService;
+    private SimpMessagingTemplate simpMessagingTemplate;
+    public RoomController(RoomService roomService, SimpMessagingTemplate simpMessagingTemplate){
+        this.roomService = roomService;
+        this.simpMessagingTemplate = simpMessagingTemplate;
     }
+
+    @SubscribeMapping("/createRoom")
+    public CreateRoomResponse createRoom(@Header("user")String username, StompHeaderAccessor headerAccessor){
+        CreateRoomResponse createRoomResponse = roomService.createRoom(username, headerAccessor.getSessionId());
+        return createRoomResponse;
+    }
+
+    @SubscribeMapping("/joinRoom/{roomId}")
+    public JoinRoomResponse joinRoom(@DestinationVariable Long roomId, StompHeaderAccessor headerAccessor){
+        String username = headerAccessor.getFirstNativeHeader("user");
+        log.info(username + " is joining room " + roomId);
+        JoinRoomResponse joinRoomResponse = roomService.joinRoom(roomId, username, headerAccessor.getSessionId());
+        return joinRoomResponse;
+    }
+
+    @MessageMapping("/sendMessage/{roomId}")
+    @SendTo("/topic/sendMessage/{roomId}")
+    public UpdateElementMessage sendMessage(@DestinationVariable String roomId, @Payload UpdateElementMessage updateElementMessage, StompHeaderAccessor headerAccessor){
+        String username = headerAccessor.getFirstNativeHeader("user");
+        return updateElementMessage;
+    }
+
 }

@@ -15,7 +15,7 @@ export const elementUpdate = ({index, id, x1, y1, x2, y2, type}, elements) => {
             store.dispatch(setElements(elementsCopy));
             const isConnected = store.getState().whiteboard.sessionConnected;
             if(isConnected ===true){
-                emitElementUpdate(elementsCopy);
+                emitElementUpdate(updatedElement);
             }
             break;
         default:

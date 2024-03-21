@@ -113,3 +113,11 @@ html, body{
   color: azure;
   border-radius: 10px;
 }
+
+.input-container {
+  position: relative;
+  padding: 5px;
+  margin: 10px;
+  width: 250px;
+  display: grid;
+}
