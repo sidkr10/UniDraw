@@ -10,5 +10,6 @@ import lombok.Getter;
 @Builder
 public class UpdateElementMessage {
     private User sender;
+    private Long roomId;
     private Element element;
 }

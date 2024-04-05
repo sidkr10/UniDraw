@@ -14,9 +14,11 @@ import java.util.List;
 public class RoomService {
 
     private RoomRepository roomRepository;
+    private ElementsService elementsService;
 
-    public RoomService(RoomRepository roomRepository){
+    public RoomService(RoomRepository roomRepository, ElementsService elementsService){
         this.roomRepository = roomRepository;
+        this.elementsService = elementsService;
     }
 
     public CreateRoomResponse createRoom(String username, String sessionId){
@@ -35,9 +37,10 @@ public class RoomService {
         List<User> participants = room.getParticipants();
         participants.add(joinee);
         room.setParticipants(participants);
+        List<Element> roomSetElements = elementsService.getRoomDrawnElements(roomid);
         JoinRoomResponse joinRoomResponse = JoinRoomResponse.builder()
                 .joinee(joinee)
-                .elements(room.getElements())
+                .elements(roomSetElements)
                 .build();
         return joinRoomResponse;
     }

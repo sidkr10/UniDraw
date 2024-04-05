@@ -20,12 +20,15 @@ function App() {
   const handleShow = () => setShow(true);
   
   const handleCreate = () => {
-    connectToWebSocket(roomactions.CREATEROOM, createUserNameRef.current.value); 
+    localStorage.setItem("user", createUserNameRef.current.value);
+    connectToWebSocket(roomactions.CREATEROOM); 
     handleClose();
   }
 
   const handleJoin = (event)=>{
-    connectToWebSocket(roomactions.JOINROOM, joinUserNameRef.current.value, roomidRef.current.value); 
+    localStorage.setItem("user", joinUserNameRef.current.value);
+    localStorage.setItem("roomId", roomidRef.current.value);
+    connectToWebSocket(roomactions.JOINROOM); 
     handleClose();
   }
   
@@ -41,7 +44,7 @@ function App() {
           Start/Join Room
         </button>
         :
-        <button className='btn-primary-start' variant="danger" onClick={endSession}>
+        <button className='btn-primary-end' variant="danger" onClick={endSession}>
           Leave Room
         </button>
       }

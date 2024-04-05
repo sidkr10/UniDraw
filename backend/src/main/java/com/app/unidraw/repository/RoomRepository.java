@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -19,9 +20,10 @@ public class RoomRepository {
     }
 
     public Long addRoom(User host){
-        Room room = Room.builder().host(host).build();
+        List<User> participants = new ArrayList<>();
+        participants.add(host);
+        Room room = Room.builder().participants(participants).host(host).build();
         room.setId(counter++);
-        room.setParticipants(new ArrayList<>());
         rooms.put(room.getId(),room);
         return room.getId();
     }

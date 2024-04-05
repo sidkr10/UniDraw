@@ -3,24 +3,26 @@ package com.app.unidraw.repository;
 import com.app.unidraw.models.Element;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class ElementsRepository {
-    private final Map<String,Element> elements = new ConcurrentHashMap<>();
+    private final Map<Long,List<Element>> elements = new ConcurrentHashMap<>();
 
-    public void addElement(Element element){
-        if(elements.containsKey(element.getId()))
-            elements.replace(element.getId(), element);
-        elements.put(element.getId(),element);
+    public void addElement(Long roomId, Element element){
+        element.setRoom_id(roomId);
+        if(!elements.containsKey(roomId)){
+            List<Element> newElements = new ArrayList<>();
+            newElements.add(element);
+            elements.put(roomId, newElements);
+        }
+        else
+            elements.get(roomId).add(element);
     }
 
-    public List<Element> getElements(){
-        List<Element> elementList = new ArrayList<>();
-        elements.forEach((s, element) -> elementList.add(element));
+    public List<Element> getElements(Long roomId){
+        List<Element> elementList = elements.get(roomId);
         return elementList;
     }
 }

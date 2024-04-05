@@ -4,6 +4,7 @@ import com.app.unidraw.dto.*;
 import com.app.unidraw.enums.State;
 import com.app.unidraw.models.Element;
 import com.app.unidraw.repository.ElementsRepository;
+import com.app.unidraw.services.ElementsService;
 import com.app.unidraw.services.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.*;
@@ -19,10 +20,8 @@ import java.util.List;
 public class RoomController {
 
     private RoomService roomService;
-    private SimpMessagingTemplate simpMessagingTemplate;
-    public RoomController(RoomService roomService, SimpMessagingTemplate simpMessagingTemplate){
+    public RoomController(RoomService roomService){
         this.roomService = roomService;
-        this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
     @SubscribeMapping("/createRoom")
@@ -37,13 +36,6 @@ public class RoomController {
         log.info(username + " is joining room " + roomId);
         JoinRoomResponse joinRoomResponse = roomService.joinRoom(roomId, username, headerAccessor.getSessionId());
         return joinRoomResponse;
-    }
-
-    @MessageMapping("/sendMessage/{roomId}")
-    @SendTo("/topic/sendMessage/{roomId}")
-    public UpdateElementMessage sendMessage(@DestinationVariable String roomId, @Payload UpdateElementMessage updateElementMessage, StompHeaderAccessor headerAccessor){
-        String username = headerAccessor.getFirstNativeHeader("user");
-        return updateElementMessage;
     }
 
 }

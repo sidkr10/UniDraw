@@ -8,6 +8,7 @@ import java.util.Objects;
 
 @Data
 public class Element implements Comparable{
+    private Long room_id;
     private String id;
     private JsonNode roughElement;
     private Type type;

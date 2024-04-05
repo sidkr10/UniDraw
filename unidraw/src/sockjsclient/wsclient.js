@@ -3,10 +3,10 @@ import { store } from '../store/store';
 import { setElements, setSessionState, updateElements } from '../store/slices/whiteboardslice';
 import roomactions from '../store/actions/RoomActinos';
 
-const endpointUrl = 'ws://192.168.1.17:8080/ws'
-let roomId = null;
-let user = null;
-let session_Id = null;
+const endpointUrl = 'ws://localhost:8080/ws'
+let roomId = localStorage.getItem("roomId");
+let username = localStorage.getItem("user");
+let session_Id = localStorage.getItem("sessionId");
 
 const client = new Client({
     brokerURL: endpointUrl,
@@ -17,12 +17,11 @@ const client = new Client({
 });
 
 
-export const connectToWebSocket = (roomaction, username, roomid) => {
-    roomId = roomid;
-    user = username;
+export const connectToWebSocket = (roomaction) => {
     client.activate();
-    const headers = {user : username};
     client.onConnect = (frame)=>{
+        username = localStorage.getItem("user");
+        const headers = {user : username};
         console.log('Socket Connection Established');
         store.dispatch(setSessionState(true));
         switch(roomaction){
@@ -30,20 +29,25 @@ export const connectToWebSocket = (roomaction, username, roomid) => {
                 client.subscribe('/app/createRoom',onCreateCallBack, headers)
                 break;
             case roomactions.JOINROOM :
-                client.subscribe("/app/joinRoom/"+roomid, onJoinCallBack, headers);
+                roomId = localStorage.getItem("roomId");
+                client.subscribe("/app/joinRoom/"+roomId, onJoinCallBack, headers);
                 break;
         }   
     }
 
     const onCreateCallBack = (frame) => {
         const response = JSON.parse(frame.body);
+        localStorage.setItem("roomId", response.roomId);
         roomId = response.roomId;
         client.subscribe("/app/joinRoom/"+roomId, onJoinCallBack, headers);
     }
 
     const onJoinCallBack = (frame)=> {
         const joinRepsonse = JSON.parse(frame.body);
+        localStorage.setItem("sessionId", joinRepsonse.joinee.sessionId);
         session_Id = joinRepsonse.joinee.sessionId;
+        const elements = joinRepsonse.elements;
+        store.dispatch(setElements(elements));
         client.subscribe('/topic/sendMessage/'+roomId,(frame)=>{
             const pubMessage = JSON.parse(frame.body);
             if(pubMessage.sender.sessionId !== session_Id){
@@ -89,9 +93,11 @@ export const emitElementUpdate = (element)=>{
         destination: '/app/sendMessage/'+roomId,
         body: JSON.stringify({sender: 
             {
-                username: user,
-                sessionId: session_Id
+                username: username,
+                sessionId: session_Id,
             } ,
+            roomId: roomId,
             element : element}),
         });
 }
+    
