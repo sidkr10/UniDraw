@@ -46,7 +46,7 @@ Welcome to the Collaborative Whiteboard Application repository! This project is 
 3. **Frontend Setup**:
     - Navigate to the frontend directory, install dependencies, and start the React application using Vite:
       ```sh
-      cd ../frontend
+      cd ../unidraw
       npm install
       npm run dev
       ```
